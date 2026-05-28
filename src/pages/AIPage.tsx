@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { generateSummaryStream, chatWithHistory } from '../api'
+import { useRecords } from '../store'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -12,6 +13,7 @@ function AIPage() {
   const [loading, setLoading] = useState(false)
   const [chatHistory, setChatHistory] = useState<Message[]>([])
   const [question, setQuestion] = useState('')
+  const { records } = useRecords()
 
   const handleGenerate = async () => {
     if (!input.trim()) return
@@ -39,7 +41,7 @@ function AIPage() {
   return (
     <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 20px' }}>
       <h1>🤖 AI 学习助手</h1>
-
+      <p>📊 当前共 {records.length} 条学习记录</p>
       {/* 输入学习内容 */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
         <input
