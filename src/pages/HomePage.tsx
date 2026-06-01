@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { generateSummary } from '../api'
 import { useRecords } from '../store'
+import { useNavigate } from 'react-router-dom'
 
 interface Record {
   id: number
@@ -21,6 +22,7 @@ function HomePage() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editContent, setEditContent] = useState('')
   const [editDuration, setEditDuration] = useState<number>(60)
+  const navigate = useNavigate()
 
   const addRecord = () => {
     if (!input.trim()) return
@@ -125,7 +127,12 @@ function HomePage() {
             padding: '12px 16px', marginBottom: 10, background: '#f5f5f5',
             borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12
           }}>
-            <span style={{ color: '#999', whiteSpace: 'nowrap' }}>{record.date}</span>
+            <span
+              style={{ color: '#1890ff', cursor: 'pointer', textDecoration: 'underline', whiteSpace: 'nowrap' }}
+              onClick={() => navigate(`/detail/${record.id}`)}
+            >
+              {record.date}
+            </span>
 
             {editingId === record.id ? (
               <div style={{ display: 'flex', gap: 8, flex: 1 }}>
