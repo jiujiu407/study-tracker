@@ -15,11 +15,15 @@ function AIPage() {
   const [question, setQuestion] = useState('')
   const { records } = useRecords()
 
-  const handleGenerate = async () => {
-    if (!input.trim()) return
+  const handleGenerate = async (fixedText?: string) => {
+    const content = (fixedText ?? input).trim()
+    if (!content) return
+    if (fixedText) {
+      setInput(content)
+    }
     setSummary('')
     setLoading(true)
-    await generateSummaryStream(input, (text) => {
+    await generateSummaryStream(content, (text) => {
       setSummary(prev => prev + text)
     })
     setLoading(false)
@@ -51,8 +55,17 @@ function AIPage() {
           placeholder="输入今天的学习内容，AI 帮你总结..."
           style={{ flex: 1, padding: '8px 12px', fontSize: 16 }}
         />
-        <button onClick={handleGenerate} disabled={loading} style={{ padding: '8px 20px', fontSize: 16 }}>
+        <button onClick={() => handleGenerate()} disabled={loading} style={{ padding: '8px 20px', fontSize: 16 }}>
           {loading ? '生成中...' : '🤖 生成总结'}
+        </button>
+      </div>
+      <div style={{ marginTop: -10, marginBottom: 20 }}>
+        <button
+          onClick={() => handleGenerate('帮我分析最近的学习情况')}
+          disabled={loading}
+          style={{ padding: '6px 12px', fontSize: 14 }}
+        >
+          帮我分析最近的学习情况
         </button>
       </div>
 
